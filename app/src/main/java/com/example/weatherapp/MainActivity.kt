@@ -6,13 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,11 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.weatherapp.ui.theme.WeatherAppTheme
 import kotlinx.coroutines.launch
 
@@ -57,8 +54,9 @@ fun MyApp(content: @Composable () -> Unit) {
 @ExperimentalAnimationApi
 @Composable
 fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
-    var scaffoldState = rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
-    var scope  = rememberCoroutineScope()
+    var scaffoldState =
+        rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
+    var scope = rememberCoroutineScope()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -67,15 +65,17 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
                 navigationIcon = {
                     Icon(
                         Icons.Filled.Menu, null,
-                        modifier = Modifier.clickable {scope.launch {
-                            scaffoldState.drawerState.open()
-                        }}
+                        modifier = Modifier.clickable {
+                            scope.launch {
+                                scaffoldState.drawerState.open()
+                            }
+                        }
                     )
                 },
                 elevation = 8.dp
             )
         },
-        drawerShape = RoundedCornerShape(topEnd = 25.dp,bottomEnd = 25.dp),
+        drawerShape = RoundedCornerShape(topEnd = 25.dp, bottomEnd = 25.dp),
         drawerContent = { Text("Bonjour le monde") },
 
         content = {
@@ -94,10 +94,7 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
                 Spacer(modifier = Modifier.padding(8.dp))
                 Counter()
                 Spacer(modifier = Modifier.padding(4.dp))
-                for (i in 1..10){
-                    UiCard()
-                    Spacer(modifier = Modifier.padding(4.dp))
-                }
+                Form()
 
             }
         },
@@ -129,11 +126,22 @@ fun Greeting(name: String) {
 }
 
 @Composable
-fun LongList() {
-    LazyColumn {
+fun Form() {
+
+    Column() {
+        var nameState by remember { mutableStateOf(TextFieldValue()) }
+
+       TextField(
+            value = nameState,
+            onValueChange = { nameState = it },
+            label ={Text("Nom")},
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        )
+
 
     }
-
 }
 
 @ExperimentalAnimationApi
@@ -144,12 +152,13 @@ fun UiCard() {
         elevation = 3.dp,
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
-        var expanded by remember { mutableStateOf(false)}
+        var expanded by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier.clickable { expanded = !expanded }
         ) {
             Image(
-                painter = painterResource(id = R.drawable.jetpack_compose_logo), contentDescription = "weights",
+                painter = painterResource(id = R.drawable.jetpack_compose_logo),
+                contentDescription = "weights",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(170.dp),
@@ -170,10 +179,13 @@ fun UiCard() {
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun DefaultPreview() {
-//    MyApp {
-//        MyScreenContent()
-//    }
-//}
+
+
+@ExperimentalAnimationApi
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    MyApp {
+        MyScreenContent()
+    }
+}
