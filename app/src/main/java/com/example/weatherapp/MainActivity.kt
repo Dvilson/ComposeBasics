@@ -84,8 +84,7 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                verticalArrangement = Arrangement.Top,               horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 for (name in names) {
                     Greeting(name = name)
@@ -178,9 +177,6 @@ fun UiCard() {
 
     }
 }
-
-
-
 @ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable
