@@ -80,22 +80,23 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
 
         content = {
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Top,               horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                for (name in names) {
-                    Greeting(name = name)
-                    Divider()
-                }
-                Spacer(modifier = Modifier.padding(8.dp))
-                Counter()
-                Spacer(modifier = Modifier.padding(4.dp))
-                Form()
-
-            }
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .verticalScroll(rememberScrollState()),
+//                verticalArrangement = Arrangement.Top,               horizontalAlignment = Alignment.CenterHorizontally
+//            ) {
+//                for (name in names) {
+//                    Greeting(name = name)
+//                    Divider()
+//                }
+//                Spacer(modifier = Modifier.padding(8.dp))
+//                Counter()
+//                Spacer(modifier = Modifier.padding(4.dp))
+//                Form()
+//
+//            }
+                  HomeScreen()
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { }) {
