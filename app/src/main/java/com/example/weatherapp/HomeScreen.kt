@@ -61,7 +61,7 @@ fun GreetingSection(
 
             Text(
                 text = "Passez une excellente journée",
-                style = MaterialTheme.typography.h4
+                style = MaterialTheme.typography.body2
             )
             Icon(
                 painter = painterResource(id = R.drawable.ic_search),
