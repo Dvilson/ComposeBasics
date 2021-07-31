@@ -4,7 +4,9 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -51,24 +53,7 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
 
         content = {
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                for (name in names) {
-                    Greeting(name = name)
-                    Divider()
-                }
-                Spacer(modifier = Modifier.padding(8.dp))
-                Counter()
-                Spacer(modifier = Modifier.padding(4.dp))
-                Form()
-
-            }
-
+            Form()
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { }) {
@@ -100,39 +85,71 @@ fun Greeting(name: String) {
 @Composable
 fun Form() {
 
+
+    Box(
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Bienvenue chez IIIIDAYS GROUP TECH",
+            style = MaterialTheme.typography.h1,
+            modifier = Modifier
+
+        )
+    }
+
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment =  Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        var nameState by remember { mutableStateOf(TextFieldValue()) }
+        var userNameState by remember { mutableStateOf(TextFieldValue()) }
+        var passwordState by remember { mutableStateOf(TextFieldValue()) }
+        var passwordVisibility by remember { mutableStateOf(false) }
         val context = LocalContext.current
 
-        TextField(
-            value = nameState,
-            onValueChange = { nameState = it },
-            label = { Text("Nom") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        )
-        Button(
-            onClick = {
-                      showToast(context = context,nameState.text)
-            },
 
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Connexion")
+            TextField(
+                value = userNameState,
+                onValueChange = { userNameState = it },
+                placeholder = { Text("Nom d'utilisateur") },
+                label = { Text("Nom d'utilisateur") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
+
+            TextField(
+                value = passwordState,
+                onValueChange = { passwordState = it },
+                placeholder = { Text("Mot de passe") },
+                label = { Text("Mot de passe") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+
+
+                )
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = {
+                    showToast(context = context, userNameState.text)
+                },
+
+                ) {
+                Text("Connexion")
+            }
         }
 
     }
 }
 
-fun showToast(context: Context, text:String){
-     if(text.isEmpty() ){
-         Toast.makeText(context, "Please enter something", Toast.LENGTH_SHORT).show()
-     }
-    else{
-         Toast.makeText(context, "le contenu de votre champ ${text}", Toast.LENGTH_SHORT).show()
+fun showToast(context: Context, text: String) {
+    if (text.isEmpty()) {
+        Toast.makeText(context, "Please enter something", Toast.LENGTH_SHORT).show()
+    } else {
+        Toast.makeText(context, "le contenu de votre champ ${text}", Toast.LENGTH_SHORT).show()
     }
 }
 
