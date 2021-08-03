@@ -1,16 +1,19 @@
 package com.example.weatherapp
 
 import android.content.Context
+import android.graphics.fonts.Font
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,8 +22,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
@@ -29,6 +35,7 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
     var scaffoldState =
         rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
     var scope = rememberCoroutineScope()
+    val showDialog =  remember { mutableStateOf(false)}
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -54,10 +61,19 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
         content = {
 
             Form()
+            if(showDialog.value){
+                Dialog(showDialog = showDialog.value,
+                onDismiss = {showDialog.value= false })
+
+            }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { }) {
-                Icon(Icons.Filled.Menu, null, Modifier.background(Color.White))
+            FloatingActionButton(
+                onClick = { showDialog.value = true },
+                contentColor = Color.White,
+                backgroundColor = Color.Blue
+            ) {
+                Icon(Icons.Filled.Add, null,)
             }
         }
     )
@@ -78,28 +94,36 @@ fun Greeting(name: String) {
 
     Text(
         text = "Hello $name!",
-        style = MaterialTheme.typography.h2
+        style = MaterialTheme.typography.h2,
+
     )
 }
 
 @Composable
 fun Form() {
 
+    var scrollState = rememberScrollState()
+
 
     Box(
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.TopCenter,
+        modifier = Modifier
+            .fillMaxSize(1f)
+            .padding(8.dp)
+
     ) {
         Text(
-            text = "Bienvenue chez IIIIDAYS GROUP TECH",
-            style = MaterialTheme.typography.h1,
-            modifier = Modifier
-
-        )
+            text = " IIIIDAYS GROUP TECH",
+            style = MaterialTheme.typography.h4
+            )
     }
 
     Column(
         horizontalAlignment =  Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
     ) {
         var userNameState by remember { mutableStateOf(TextFieldValue()) }
         var passwordState by remember { mutableStateOf(TextFieldValue()) }
@@ -153,6 +177,7 @@ fun showToast(context: Context, text: String) {
     }
 }
 
+
 @ExperimentalAnimationApi
 @Composable
 fun UiCard() {
@@ -187,3 +212,36 @@ fun UiCard() {
 
     }
 }
+
+@Composable
+fun Dialog(
+    showDialog:Boolean,
+    onDismiss:()->Unit
+) {
+   if(showDialog){
+       AlertDialog(
+           onDismissRequest = onDismiss,
+           confirmButton = {
+               TextButton(onClick = { }) {
+                   Text(text = "Oui")
+
+               }
+           },
+           dismissButton = {
+               TextButton(onClick = { /*TODO*/ }) {
+                   Text("Non")
+
+               }
+           },
+           title = {
+               Text("Test des alerDialog dans Compose")
+
+           },
+           text = {
+               Text("Bonjour Mr. Camara vous etes entrain de tester  les AlertDialog dans compose")
+           }
+
+       )
+   }
+}
+
