@@ -1,15 +1,12 @@
-package com.example.weatherapp
+package com.example.weatherapp.ui
 
 import android.content.Context
-import android.graphics.fonts.Font
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -22,21 +19,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.weatherapp.HeadlineSection
+import com.example.weatherapp.LatestNewsSection
+import com.example.weatherapp.R
 import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @Composable
-fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
+fun MyScreenContent(names: List<String> = listOf("Android", "There"), navController:NavController) {
     var scaffoldState =
         rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
     var scope = rememberCoroutineScope()
     val showDialog =  remember { mutableStateOf(false)}
-    Scaffold(
+       Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
@@ -60,7 +59,22 @@ fun MyScreenContent(names: List<String> = listOf("Android", "There")) {
 
         content = {
 
-            Form()
+            LazyColumn(
+                contentPadding = PaddingValues(
+                start = 8.dp,
+                top = 8.dp,
+                end = 8.dp,
+                bottom = 8.dp)
+            ){
+                item {
+                    HeadlineSection(navcontroller = navController)
+                }
+                items(60){
+                    LatestNewsSection()
+                }
+            }
+
+
             if(showDialog.value){
                 Dialog(showDialog = showDialog.value,
                 onDismiss = {showDialog.value= false })
@@ -159,11 +173,14 @@ fun Form() {
             Button(
                 onClick = {
                     showToast(context = context, userNameState.text)
+
                 },
 
                 ) {
                 Text("Connexion")
             }
+            Spacer(modifier = Modifier.height(8.dp))
+            CircularProgressIndicator()
         }
 
     }
